@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import React, { useRef } from "react";
-
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import React from "react";
+import { useControls } from "leva";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import "./App.css";
 import img1 from "/1.png";
@@ -12,9 +12,8 @@ import img5 from "/5.png";
 import img6 from "/6.png";
 import img7 from "/7.png";
 import img8 from "/8.png";
-import { degToRad } from "three/src/math/MathUtils";
 
-function Image({ img, position }) {
+function Image({ img, position, visible }) {
   const texture = useLoader(THREE.TextureLoader, img);
   return (
     <mesh position={position}>
@@ -25,20 +24,63 @@ function Image({ img, position }) {
         attach="material"
         map={texture}
         toneMapped={false}
+        visible={visible}
       />
     </mesh>
   );
 }
 
 const Scene = () => {
+  const controls = useControls({
+    spacing: {
+      value: 1,
+      min: 0,
+      max: 2,
+      step: 0.01,
+    },
+    translateX: {
+      value: 0,
+      min: -4,
+      max: 4,
+      step: 0.01,
+    },
+    translateY: {
+      value: 0,
+      min: -2,
+      max: 2,
+      step: 0.01,
+    },
+    translateZ: {
+      value: 0,
+      min: -15,
+      max: 0,
+      step: 0.01,
+    },
+    showSlices: {
+      value: [0, 8],
+      min: 0,
+      max: 8,
+      step: 1,
+    },
+  });
+
+  console.log("Distance:", controls);
+
   return (
     <>
       <ambientLight />
-      <pointLight position={[5, 5, 5]} intensity={1} />
-      <pointLight position={[-3, -3, 2]} />
       <OrbitControls />
       {[img1, img2, img3, img4, img5, img6, img7, img8].map((img, i) => (
-        <Image key={i} img={img} position={[0, 0, i]} />
+        <Image
+          key={i}
+          img={img}
+          visible={i >= controls.showSlices[0] && i < controls.showSlices[1]}
+          position={[
+            controls.translateX,
+            controls.translateY,
+            controls.translateZ + i * controls.spacing,
+          ]}
+        />
       ))}
     </>
   );
