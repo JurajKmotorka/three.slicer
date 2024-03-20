@@ -87,7 +87,12 @@ const Scene = () => {
 const App = () => {
   function Loader() {
     const { active, progress, errors, item, loaded, total } = useProgress();
-    return <Html center>{progress} % loaded</Html>;
+    return (
+      <Html center>
+        {" "}
+        <p>{progress} % loaded</p>
+      </Html>
+    );
   }
   return (
     <div id="canvas-container">
