@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import React from "react";
+import React, { Suspense } from "react";
 import { useControls } from "leva";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useProgress, Html } from "@react-three/drei";
 import "./App.css";
 import img1 from "/1.png";
 import img2 from "/2.png";
@@ -64,8 +64,6 @@ const Scene = () => {
     },
   });
 
-  console.log("Distance:", controls);
-
   return (
     <>
       <ambientLight />
@@ -87,6 +85,10 @@ const Scene = () => {
 };
 
 const App = () => {
+  function Loader() {
+    const { active, progress, errors, item, loaded, total } = useProgress();
+    return <Html center>{progress} % loaded</Html>;
+  }
   return (
     <div id="canvas-container">
       <Canvas
@@ -95,8 +97,10 @@ const App = () => {
           position: [0, 0, -3],
         }}
       >
-        <OrbitControls />
-        <Scene />
+        <Suspense fallback={<Loader />}>
+          <OrbitControls />
+          <Scene />
+        </Suspense>
       </Canvas>
     </div>
   );
