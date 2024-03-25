@@ -51,6 +51,7 @@ const DualSlider = ({
   return (
     <div className="container">
       <input
+        title="slider"
         type="range"
         min={min}
         max={max}
@@ -64,6 +65,7 @@ const DualSlider = ({
         style={{ zIndex: minVal > max - 100 ? "5" : "3" }}
       />
       <input
+        title="slider"
         type="range"
         min={min}
         max={max}
