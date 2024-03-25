@@ -40,7 +40,7 @@ export default function Scene({
           {labels && (
             <Html
               position={[
-                translateX + 2,
+                translateX * -1 + 2,
                 translateY - 1,
                 translateZ + i * spacing,
               ]}
