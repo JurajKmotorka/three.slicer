@@ -115,6 +115,7 @@ const App = () => {
             type="range"
             min="-10"
             max="10"
+            step={"0.01"}
             value={translateX}
             onChange={(e) => setTranslateX(parseFloat(e.target.value))}
           />
@@ -127,6 +128,7 @@ const App = () => {
             type="range"
             min="-10"
             max="10"
+            step={"0.01"}
             value={translateY}
             onChange={(e) => setTranslateY(parseFloat(e.target.value))}
           />
@@ -140,6 +142,7 @@ const App = () => {
             type="range"
             min="-10"
             max="10"
+            step={"0.01"}
             value={translateZ}
             onChange={(e) => setTranslateZ(parseFloat(e.target.value))}
           />
