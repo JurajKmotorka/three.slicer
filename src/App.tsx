@@ -57,6 +57,7 @@ const App = () => {
 
     setUploadedImages(uploadedImageUrls || []);
   };
+  const [aspectRatio, setAspectRatio] = useState<number[]>([1, 1]);
   const [translateX, setTranslateX] = useState<number>(0);
   const [translateY, setTranslateY] = useState<number>(0);
   const [translateZ, setTranslateZ] = useState<number>(0);
@@ -65,6 +66,7 @@ const App = () => {
     0,
     uploadedImages.length,
   ]);
+  const [labels, setLabels] = useState<boolean>(true);
 
   return (
     <div className="App flex">
@@ -76,6 +78,28 @@ const App = () => {
           multiple
           onChange={handleFileUpload}
         />
+        <div className="pb-2">
+          <p>Aspect Ratio:</p>
+          <input
+            title="X"
+            className="w-10"
+            type="number"
+            value={aspectRatio[0]}
+            onChange={(e) =>
+              setAspectRatio([parseFloat(e.target.value), aspectRatio[1]])
+            }
+          />{" "}
+          x{" "}
+          <input
+            title="Y"
+            className="w-10"
+            type="number"
+            value={aspectRatio[1]}
+            onChange={(e) =>
+              setAspectRatio([aspectRatio[0], parseFloat(e.target.value)])
+            }
+          />
+        </div>
         <button
           className="p-2 border rounded bg-indigo-600 text-slate-50 hover:bg-indigo-500 "
           onClick={() => setUploadedImages(defaultImages)}
@@ -143,6 +167,15 @@ const App = () => {
             onChange={(min, max) => setShowSlices([min, max])}
           />
         </div>
+        <div>
+          <p>Show labels</p>
+          <input
+            title="labels"
+            type="checkbox"
+            defaultChecked
+            onChange={() => setLabels(!labels)}
+          />
+        </div>
       </div>
       {uploadedImages.length > 0 && (
         <Canvas
@@ -159,6 +192,8 @@ const App = () => {
               translateZ={translateZ}
               spacing={spacing}
               showSlices={showSlices}
+              aspectRatio={aspectRatio[0] / aspectRatio[1]}
+              labels={labels}
             />
           </Suspense>
         </Canvas>

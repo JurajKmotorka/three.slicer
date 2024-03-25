@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import "./DualSlider.css";
 
+// Import statements...
+
 const DualSlider = ({
   min,
   max,
@@ -16,13 +18,11 @@ const DualSlider = ({
   const maxValRef = useRef(max);
   const range = useRef({} as HTMLDivElement);
 
-  // Convert to percentage
   const getPercent = useCallback(
     (value: number) => Math.round(((value - min) / (max - min)) * 100),
     [min, max]
   );
 
-  // Set width of the range to decrease from the left side
   useEffect(() => {
     const minPercent = getPercent(minVal);
     const maxPercent = getPercent(maxValRef.current);
@@ -31,9 +31,8 @@ const DualSlider = ({
       range.current.style.left = `${minPercent}%`;
       range.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }, [minVal, getPercent]);
+  }, [min, max, minVal, getPercent]);
 
-  // Set width of the range to decrease from the right side
   useEffect(() => {
     const minPercent = getPercent(minValRef.current);
     const maxPercent = getPercent(maxVal);
@@ -41,12 +40,18 @@ const DualSlider = ({
     if (range.current) {
       range.current.style.width = `${maxPercent - minPercent}%`;
     }
-  }, [maxVal, getPercent]);
+  }, [min, max, maxVal, getPercent]);
 
-  // Get min and max values when their state changes
   useEffect(() => {
-    onChange(minVal, maxVal);
-  }, [minVal, maxVal, onChange]);
+    memoizedOnChange(minVal, maxVal);
+  }, [minVal, maxVal]);
+
+  const memoizedOnChange = useCallback(
+    (minVal: number, maxVal: number) => {
+      onChange(minVal, maxVal);
+    },
+    [onChange]
+  );
 
   return (
     <div className="container">
